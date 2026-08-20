@@ -18,4 +18,4 @@
 1. Work STRICTLY on the single assigned task from `TASKS.md`. Do not build ahead.
 2. After completing a task, run `pnpm type-check` and `pnpm lint` before marking it done `[x]`.
 3. Never install global dependencies; always target specific packages via `pnpm --filter`.
-4. At every change or implmentation update `README.md` file
+4. At every change or implmentation update `README.md` file. And STRICTLY create git branch for every feature also put comment before pushing.
