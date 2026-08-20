@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { VendorController } from "./vendor.controller.js";
+import * as vendorController from "./vendor.controller.js";
 import { validate } from "../../common/middleware/validate.js";
 import {
   createVendorSchema,
@@ -10,11 +10,10 @@ import {
 import { asyncHandler } from "../../common/middleware/async-handler.js";
 
 const router = Router();
-const controller = new VendorController();
 
-router.get("/", validate(listVendorsSchema), asyncHandler(controller.list));
-router.get("/:id", validate(getVendorSchema), asyncHandler(controller.getById));
-router.post("/", validate(createVendorSchema), asyncHandler(controller.create));
-router.put("/:id", validate(updateVendorSchema), asyncHandler(controller.update));
+router.get("/", validate(listVendorsSchema), asyncHandler(vendorController.list));
+router.get("/:id", validate(getVendorSchema), asyncHandler(vendorController.getById));
+router.post("/", validate(createVendorSchema), asyncHandler(vendorController.create));
+router.put("/:id", validate(updateVendorSchema), asyncHandler(vendorController.update));
 
 export default router as Router;

@@ -20,42 +20,46 @@ B2C E-Commerce Multi-Vendor Platform built with MERN stack + Turborepo monorepo.
 ```
 e-com-app/
 ├── apps/
-│   ├── api/                        # Express.js REST API
-│   │   ├── prisma/                 # Prisma schema + migrations
-│   │   ├── prisma.config.ts        # Prisma CLI config
+│   ├── api/                            # Express.js REST API
+│   │   ├── prisma/                     # Prisma schema + migrations + seed
+│   │   │   ├── schema.prisma           # Full RBAC + e-commerce + variations schema
+│   │   │   ├── seed.ts                 # Seed script (clothing dummy data)
+│   │   │   └── prisma.config.ts        # Prisma CLI config with seed command
 │   │   └── src/
-│   │       ├── common/             # Shared middleware + utils
-│   │       │   ├── middleware/      # auth, rbac, error-handler, validate, not-found, async-handler
-│   │       │   ├── types/          # Express Request augmentation (express.d.ts)
-│   │       │   └── utils/          # AppError hierarchy
-│   │       ├── config/             # Env vars, Prisma client singleton, Redis client singleton
-│   │       ├── modules/            # Feature-based N-tier modules
-│   │       │   ├── auth/           # Register, login, logout, getMe
-│   │       │   ├── users/          # User CRUD, profile update, password change
-│   │       │   ├── products/       # Product CRUD
-│   │       │   ├── orders/         # Order management
-│   │       │   ├── vendors/        # Vendor profiles
-│   │       │   ├── reviews/        # Product reviews
-│   │       │   └── cart/           # Shopping cart
-│   │       ├── routes/             # Route aggregator
-│   │       ├── app.ts              # Express app setup
-│   │       └── server.ts           # Entry point
-│   └── web/                        # Next.js 16 frontend
+│   │       ├── common/                 # Shared middleware + utils
+│   │       │   ├── middleware/          # auth, rbac, error-handler, validate, not-found, async-handler
+│   │       │   ├── types/              # Express Request augmentation (express.d.ts)
+│   │       │   └── utils/              # AppError hierarchy
+│   │       ├── config/                 # Env vars, Prisma client, Redis client
+│   │       ├── modules/                # Feature-based N-tier modules (all function-based)
+│   │       │   ├── auth/               # Register, login, logout, getMe
+│   │       │   ├── users/              # User CRUD, profile update, password change
+│   │       │   ├── products/           # Product CRUD
+│   │       │   ├── attributes/         # Attribute CRUD (Size, Color, Material)
+│   │       │   ├── variants/           # Product variant CRUD (linked to products)
+│   │       │   ├── orders/             # Order management
+│   │       │   ├── vendors/            # Vendor profiles
+│   │       │   ├── reviews/            # Product reviews
+│   │       │   └── cart/               # Shopping cart (with variant support)
+│   │       ├── routes/                 # Route aggregator
+│   │       ├── app.ts                  # Express app setup
+│   │       └── server.ts               # Entry point
+│   └── web/                            # Next.js 16 frontend
 │       └── src/
-│           ├── app/                # App Router with 4 portal route groups
-│           │   ├── (public)/       # Public pages: /, /products, /cart
-│           │   ├── (customer)/     # Customer portal: /customer/*
-│           │   ├── (admin)/        # Admin portal: /admin/*
-│           │   └── (vendor)/       # Vendor portal: /vendor/*
+│           ├── app/                    # App Router with 4 portal route groups
+│           │   ├── (public)/           # Public pages: /, /products, /cart
+│           │   ├── (customer)/         # Customer portal: /customer/*
+│           │   ├── (admin)/            # Admin portal: /admin/*
+│           │   └── (vendor)/           # Vendor portal: /vendor/*
 │           ├── components/
-│           │   ├── ui/             # Reusable UI primitives
-│           │   ├── layout/         # Navbar, Sidebar, Footer
-│           │   └── shared/         # PageTransition, FadeIn
-│           └── lib/                # utils.ts (cn helper)
+│           │   ├── ui/                 # Button, Input, Card, Badge, Modal, Skeleton
+│           │   ├── layout/             # Navbar, Sidebar, Footer
+│           │   └── shared/             # PageTransition, FadeIn
+│           └── lib/                    # utils.ts (cn helper)
 └── packages/
-    ├── eslint-config/              # Shared ESLint 9 flat config
-    ├── tsconfig/                   # Shared TypeScript configs
-    └── types/                      # Shared TypeScript interfaces
+    ├── eslint-config/                  # Shared ESLint 9 flat config
+    ├── tsconfig/                       # Shared TypeScript configs
+    └── types/                          # Shared TypeScript interfaces
 ```
 
 ## Getting Started
@@ -85,8 +89,11 @@ cp apps/api/.env.example apps/api/.env
 # Generate Prisma client
 pnpm --filter api exec prisma generate
 
-# Run migrations
-pnpm --filter api exec prisma migrate dev
+# Apply schema to database
+pnpm --filter api exec prisma db push
+
+# Seed dummy data
+pnpm --filter api exec prisma db seed
 ```
 
 ### Redis Setup
@@ -123,6 +130,27 @@ pnpm turbo build        # Build all packages
 pnpm turbo type-check   # Type-check all packages
 pnpm turbo lint         # Lint all packages
 ```
+
+### Seed Data
+
+The seed script creates:
+
+| Table | Records |
+|-------|---------|
+| Roles | 3 (ADMIN, VENDOR, CUSTOMER) |
+| Permissions | 26 |
+| Users | 5 (1 admin, 2 vendors, 2 customers) |
+| Vendor Profiles | 2 |
+| Categories | 6 (Men's, Women's, Kids' Clothing + Shoes, Accessories, Sale) |
+| Products | 12 (clothing, shoes, accessories) |
+| Attributes | 3 (Size, Color, Material) |
+| Attribute Values | 15 (XS-XXL, 5 colors, 3 materials) |
+| Product Variants | 64 (size × color combos with SKU, price, inventory) |
+| Orders | 3 |
+| Reviews | 8 |
+| Cart Items | 5 |
+
+**Sample Credentials:** `admin@e-com.com` / `password123` (+ vendor/customer variants)
 
 ## Frontend Portals
 
@@ -163,9 +191,18 @@ All page content wrapped in `<PageTransition>` for fade + slide entrance. `<Fade
 
 ## API Architecture
 
+All API code follows a **function-based** N-tier pattern:
+
 ```
 Request → Route → validate(Zod) → Controller → Service → Repository → Prisma → MySQL
 ```
+
+| Layer | Pattern |
+|-------|---------|
+| **Repository** | `export async function findById(id) { ... }` |
+| **Service** | `import * as repo from "./x.repository.js"; export async function getById(id) { ... }` |
+| **Controller** | `import * as svc from "./x.service.js"; export async function getById(req, res, next) { ... }` |
+| **Routes** | `import * as ctrl from "./x.controller.js"; router.get("/", ctrl.getById)` |
 
 ### API Endpoints (`/api/v1`)
 
@@ -174,14 +211,28 @@ Request → Route → validate(Zod) → Controller → Service → Repository �
 | Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/logout` 🔒, `GET /auth/me` 🔒 |
 | Users | `GET /users` 🔒ADMIN, `GET /users/:id` 🔒ADMIN, `PUT /users/profile` 🔒, `PUT /users/password` 🔒, `DELETE /users/:id` 🔒ADMIN |
 | Products | `GET /products`, `GET /products/:id`, `POST /products`, `PUT /products/:id`, `DELETE /products/:id` |
+| Attributes | `GET /attributes`, `GET /attributes/:id`, `POST /attributes` 🔒ADMIN, `PUT /attributes/:id` 🔒ADMIN, `DELETE /attributes/:id` 🔒ADMIN |
+| Variants | `GET /variants/products/:productId/variants`, `GET /variants/:id`, `POST /variants/products/:productId/variants` 🔒VENDOR, `PUT /variants/:id` 🔒VENDOR, `DELETE /variants/:id` 🔒VENDOR |
 | Orders | `GET /orders`, `GET /orders/:id`, `POST /orders` |
 | Vendors | `GET /vendors`, `GET /vendors/:id`, `POST /vendors`, `PUT /vendors/:id` |
 | Reviews | `GET /reviews`, `GET /reviews/:id`, `POST /reviews`, `PUT /reviews/:id`, `DELETE /reviews/:id` |
 | Cart | `GET /cart`, `POST /cart`, `PUT /cart/:id`, `DELETE /cart/:id`, `DELETE /cart` |
 
-🔒 = Requires `Authorization: Bearer <token>` | ADMIN = Requires ADMIN role
+🔒 = Requires `Authorization: Bearer <token>` | ADMIN/VENDOR = Requires role
 
-## Database Schema (RBAC)
+### Product Variations (Clothing)
+
+For clothing e-commerce (men/women/kids), products have **variants** by Size × Color:
+
+- **Attribute** → Size (XS/S/M/L/XL/XXL), Color (Red/Blue/Black/White/Green), Material (Cotton/Polyester/Denim)
+- **ProductVariant** → specific SKU with its own price, inventory, weight
+- **VariantAttribute** → links variant to attribute values (e.g., "Size=L" + "Color=Red")
+
+Each variant has a unique SKU and can be ordered independently.
+
+## Database Schema (RBAC + Variations)
+
+### Core RBAC Tables
 
 | Table | Purpose |
 |-------|---------|
@@ -190,6 +241,10 @@ Request → Route → validate(Zod) → Controller → Service → Repository �
 | `role_permissions` | Many-to-many: role ↔ permission |
 | `user_roles` | Many-to-many: user ↔ role |
 
-Domain Models: User, VendorProfile, Category, Product, Order, OrderItem, Review, CartItem
+### Domain Tables
+`users`, `vendor_profiles`, `categories`, `products`, `orders`, `order_items`, `reviews`, `cart_items`
+
+### Variation Tables
+`attributes`, `attribute_values`, `product_variants`, `variant_attributes`
 
 See `apps/api/prisma/schema.prisma` for the full schema.

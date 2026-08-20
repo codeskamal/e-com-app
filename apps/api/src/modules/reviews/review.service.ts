@@ -1,26 +1,22 @@
-import { ReviewRepository } from "./review.repository.js";
+import * as reviewRepository from "./review.repository.js";
 import type { CreateReviewInput, UpdateReviewInput, ListReviewsQuery } from "./review.schema.js";
 
-const reviewRepository = new ReviewRepository();
+export async function getById(id: number) {
+  return reviewRepository.findOrFail(id);
+}
 
-export class ReviewService {
-  async getById(id: number) {
-    return reviewRepository.findOrFail(id);
-  }
+export async function list(query: ListReviewsQuery) {
+  return reviewRepository.findAll(query);
+}
 
-  async list(query: ListReviewsQuery) {
-    return reviewRepository.findAll(query);
-  }
+export async function create(userId: number, data: CreateReviewInput) {
+  return reviewRepository.create(userId, data);
+}
 
-  async create(userId: number, data: CreateReviewInput) {
-    return reviewRepository.create(userId, data);
-  }
+export async function update(id: number, data: UpdateReviewInput) {
+  return reviewRepository.update(id, data);
+}
 
-  async update(id: number, data: UpdateReviewInput) {
-    return reviewRepository.update(id, data);
-  }
-
-  async remove(id: number) {
-    return reviewRepository.delete(id);
-  }
+export async function remove(id: number) {
+  return reviewRepository.remove(id);
 }

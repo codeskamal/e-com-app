@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ProductController } from "./product.controller.js";
+import * as productController from "./product.controller.js";
 import { validate } from "../../common/middleware/validate.js";
 import {
   createProductSchema,
@@ -10,12 +10,11 @@ import {
 import { asyncHandler } from "../../common/middleware/async-handler.js";
 
 const router = Router();
-const controller = new ProductController();
 
-router.get("/", validate(listProductsSchema), asyncHandler(controller.list));
-router.get("/:id", validate(getProductSchema), asyncHandler(controller.getById));
-router.post("/", validate(createProductSchema), asyncHandler(controller.create));
-router.put("/:id", validate(updateProductSchema), asyncHandler(controller.update));
-router.delete("/:id", validate(getProductSchema), asyncHandler(controller.remove));
+router.get("/", validate(listProductsSchema), asyncHandler(productController.list));
+router.get("/:id", validate(getProductSchema), asyncHandler(productController.getById));
+router.post("/", validate(createProductSchema), asyncHandler(productController.create));
+router.put("/:id", validate(updateProductSchema), asyncHandler(productController.update));
+router.delete("/:id", validate(getProductSchema), asyncHandler(productController.remove));
 
 export default router as Router;

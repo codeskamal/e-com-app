@@ -1,20 +1,20 @@
 import type { Request, Response, NextFunction } from "express";
-import * as productService from "./product.service.js";
+import * as attributeService from "./attribute.service.js";
 
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    const product = await productService.getById(id);
-    res.json({ data: product });
+    const attribute = await attributeService.getById(id);
+    res.json({ data: attribute });
   } catch (error) {
     next(error);
   }
 }
 
-export async function list(req: Request, res: Response, next: NextFunction) {
+export async function list(_req: Request, res: Response, next: NextFunction) {
   try {
-    const result = await productService.list(req.query as never);
-    res.json({ data: result });
+    const attributes = await attributeService.list();
+    res.json({ data: attributes });
   } catch (error) {
     next(error);
   }
@@ -22,8 +22,8 @@ export async function list(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const product = await productService.create(req.body);
-    res.status(201).json({ data: product });
+    const attribute = await attributeService.create(req.body);
+    res.status(201).json({ data: attribute });
   } catch (error) {
     next(error);
   }
@@ -32,8 +32,8 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    const product = await productService.update(id, req.body);
-    res.json({ data: product });
+    const attribute = await attributeService.update(id, req.body);
+    res.json({ data: attribute });
   } catch (error) {
     next(error);
   }
@@ -42,7 +42,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    await productService.remove(id);
+    await attributeService.remove(id);
     res.status(204).send();
   } catch (error) {
     next(error);

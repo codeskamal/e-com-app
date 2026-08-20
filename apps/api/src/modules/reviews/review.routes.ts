@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ReviewController } from "./review.controller.js";
+import * as reviewController from "./review.controller.js";
 import { validate } from "../../common/middleware/validate.js";
 import {
   createReviewSchema,
@@ -10,12 +10,11 @@ import {
 import { asyncHandler } from "../../common/middleware/async-handler.js";
 
 const router = Router();
-const controller = new ReviewController();
 
-router.get("/", validate(listReviewsSchema), asyncHandler(controller.list));
-router.get("/:id", validate(getReviewSchema), asyncHandler(controller.getById));
-router.post("/", validate(createReviewSchema), asyncHandler(controller.create));
-router.put("/:id", validate(updateReviewSchema), asyncHandler(controller.update));
-router.delete("/:id", validate(getReviewSchema), asyncHandler(controller.remove));
+router.get("/", validate(listReviewsSchema), asyncHandler(reviewController.list));
+router.get("/:id", validate(getReviewSchema), asyncHandler(reviewController.getById));
+router.post("/", validate(createReviewSchema), asyncHandler(reviewController.create));
+router.put("/:id", validate(updateReviewSchema), asyncHandler(reviewController.update));
+router.delete("/:id", validate(getReviewSchema), asyncHandler(reviewController.remove));
 
 export default router as Router;

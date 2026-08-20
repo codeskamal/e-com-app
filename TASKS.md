@@ -29,4 +29,4 @@
 - [] Task 2.2: Design should be mobile first and responsive for all devices.
 - [x] Task 2.3: In `apps/api` build api for getting logged user details, authentication and authorization middleware, profile change, password change, also radis because we can expire jwt after logout but we can prevent to access routes using loggedout token.
 - [] Task 2.4: Design public pages like home page, product listing page, cart pages.
-- [] Task 2.5: In `apps/api` build api and schema for product Add some dummy record for all tables.
+- [x] Task 2.5: In `apps/api` build api and schema for product variations. Treat as clothing for men, women, kids e commerece website. Add some dummy record for all tables. Also create some user
