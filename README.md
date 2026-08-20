@@ -13,37 +13,49 @@ B2C E-Commerce Multi-Vendor Platform built with MERN stack + Turborepo monorepo.
 | Validation | Zod |
 | Auth | JWT (jsonwebtoken + bcryptjs) |
 | Session Store | Redis (ioredis) — JWT blacklist for logout revocation |
+| Animations | Motion (Framer Motion rebrand) |
 
 ## Project Structure
 
 ```
 e-com-app/
 ├── apps/
-│   ├── api/                    # Express.js REST API
-│   │   ├── prisma/             # Prisma schema + migrations
-│   │   ├── prisma.config.ts    # Prisma CLI config
+│   ├── api/                        # Express.js REST API
+│   │   ├── prisma/                 # Prisma schema + migrations
+│   │   ├── prisma.config.ts        # Prisma CLI config
 │   │   └── src/
-│   │       ├── common/         # Shared middleware + utils
-│   │       │   ├── middleware/  # error-handler, validate, not-found, async-handler, auth, rbac
-│   │       │   ├── types/      # Express Request augmentation (express.d.ts)
-│   │       │   └── utils/      # AppError hierarchy
-│   │       ├── config/         # Env vars, Prisma client singleton, Redis client singleton
-│   │       ├── modules/        # Feature-based N-tier modules
-│   │       │   ├── auth/       # Register, login, logout, getMe
-│   │       │   ├── users/      # User CRUD, profile update, password change
-│   │       │   ├── products/   # Product CRUD
-│   │       │   ├── orders/     # Order management
-│   │       │   ├── vendors/    # Vendor profiles
-│   │       │   ├── reviews/    # Product reviews
-│   │       │   └── cart/       # Shopping cart
-│   │       ├── routes/         # Route aggregator
-│   │       ├── app.ts          # Express app setup
-│   │       └── server.ts       # Entry point
-│   └── web/                    # Next.js 16 frontend
+│   │       ├── common/             # Shared middleware + utils
+│   │       │   ├── middleware/      # auth, rbac, error-handler, validate, not-found, async-handler
+│   │       │   ├── types/          # Express Request augmentation (express.d.ts)
+│   │       │   └── utils/          # AppError hierarchy
+│   │       ├── config/             # Env vars, Prisma client singleton, Redis client singleton
+│   │       ├── modules/            # Feature-based N-tier modules
+│   │       │   ├── auth/           # Register, login, logout, getMe
+│   │       │   ├── users/          # User CRUD, profile update, password change
+│   │       │   ├── products/       # Product CRUD
+│   │       │   ├── orders/         # Order management
+│   │       │   ├── vendors/        # Vendor profiles
+│   │       │   ├── reviews/        # Product reviews
+│   │       │   └── cart/           # Shopping cart
+│   │       ├── routes/             # Route aggregator
+│   │       ├── app.ts              # Express app setup
+│   │       └── server.ts           # Entry point
+│   └── web/                        # Next.js 16 frontend
+│       └── src/
+│           ├── app/                # App Router with 4 portal route groups
+│           │   ├── (public)/       # Public pages: /, /products, /cart
+│           │   ├── (customer)/     # Customer portal: /customer/*
+│           │   ├── (admin)/        # Admin portal: /admin/*
+│           │   └── (vendor)/       # Vendor portal: /vendor/*
+│           ├── components/
+│           │   ├── ui/             # Reusable UI primitives
+│           │   ├── layout/         # Navbar, Sidebar, Footer
+│           │   └── shared/         # PageTransition, FadeIn
+│           └── lib/                # utils.ts (cn helper)
 └── packages/
-    ├── eslint-config/          # Shared ESLint 9 flat config
-    ├── tsconfig/               # Shared TypeScript configs
-    └── types/                  # Shared TypeScript interfaces
+    ├── eslint-config/              # Shared ESLint 9 flat config
+    ├── tsconfig/                   # Shared TypeScript configs
+    └── types/                      # Shared TypeScript interfaces
 ```
 
 ## Getting Started
@@ -79,12 +91,7 @@ pnpm --filter api exec prisma migrate dev
 
 ### Redis Setup
 
-Redis is used for JWT blacklist (logout token revocation). Ensure Redis is running locally:
-
-```bash
-# Windows (if installed as service)
-# Redis runs on 127.0.0.1:6379 by default
-```
+Redis is used for JWT blacklist (logout token revocation). Ensure Redis is running locally on `127.0.0.1:6379`.
 
 ### Environment Variables (`apps/api/.env`)
 
@@ -101,21 +108,12 @@ REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 ```
 
-- `DATABASE_URL` — Used by Prisma CLI for migrations (via `prisma.config.ts`)
-- `DATABASE_HOST/USER/PASSWORD/NAME` — Used by the MariaDB adapter at runtime
-- `REDIS_HOST/PORT` — Redis connection for JWT blacklist
-
 ### Development
 
 ```bash
-# Start all apps in dev mode
-pnpm turbo dev
-
-# Start API only
-pnpm --filter api dev
-
-# Start web only
-pnpm --filter web dev
+pnpm turbo dev          # Start all apps in dev mode
+pnpm --filter api dev   # Start API only
+pnpm --filter web dev   # Start web only
 ```
 
 ### Build & Verify
@@ -126,44 +124,50 @@ pnpm turbo type-check   # Type-check all packages
 pnpm turbo lint         # Lint all packages
 ```
 
-### Prisma Commands
+## Frontend Portals
 
-```bash
-pnpm --filter api exec prisma generate     # Regenerate Prisma client
-pnpm --filter api exec prisma migrate dev  # Run pending migrations
-pnpm --filter api exec prisma studio       # Open Prisma Studio
-```
+The web app uses Next.js App Router with **route groups** for four distinct portals:
+
+| Portal | URL Prefix | Layout | Purpose |
+|--------|-----------|--------|---------|
+| **Public** | `/`, `/products`, `/cart` | Navbar + Footer | Browse & shop |
+| **Customer** | `/customer/*` | Navbar + Sidebar | Order history, profile |
+| **Admin** | `/admin/*` | Navbar + Sidebar | Platform management |
+| **Vendor** | `/vendor/*` | Navbar + Sidebar | Store management |
+
+### UI Components (`src/components/ui/`)
+
+| Component | Description |
+|-----------|-------------|
+| `Button` | Primary/secondary/outline/ghost/danger variants, loading state, motion animations |
+| `Input` | Label + error state, focus ring with brand colors |
+| `Card` | Card container with optional hover elevation |
+| `Badge` | Pill-shaped tag with color variants |
+| `Modal` | Animated dialog with backdrop (AnimatePresence) |
+| `Skeleton` | Pulse-animated loading placeholder |
+
+### Brand Colors (Tailwind CSS v4 theme)
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `brand-1` | `#DC095E` | Primary CTA, accents |
+| `brand-1-light` | `#f51c85` | Hover states |
+| `brand-1-dark` | `#a8074a` | Active/pressed states |
+| `brand-2` | `#09DC88` | Success, secondary accents |
+| `brand-2-light` | `#3aea9f` | Light success |
+| `brand-2-dark` | `#07a864` | Dark success |
+
+### Animations
+
+All page content wrapped in `<PageTransition>` for fade + slide entrance. `<FadeIn>` for staggered element reveals. `<Modal>` uses `AnimatePresence` for enter/exit transitions.
 
 ## API Architecture
-
-The API uses a **feature-based N-tier layered architecture**:
 
 ```
 Request → Route → validate(Zod) → Controller → Service → Repository → Prisma → MySQL
 ```
 
-| Layer | Responsibility |
-|-------|---------------|
-| **Route** | HTTP endpoints, validation middleware, auth middleware |
-| **Controller** | req/res translation, delegates to service |
-| **Service** | Business logic, throws domain errors |
-| **Repository** | All Prisma queries, data access |
-| **Schema** | Zod validation schemas + inferred TS types |
-
-### Middleware
-
-| Middleware | Purpose |
-|------------|---------|
-| `auth` | JWT verification + Redis blacklist check. Attaches `req.user` with `{ sub, email }` |
-| `rbac` | Role-based authorization. Usage: `authorize("ADMIN", "VENDOR")` |
-| `validate` | Zod schema validation for body, params, query |
-| `error-handler` | Global error handler — maps AppError hierarchy to HTTP status codes |
-| `async-handler` | Wraps async route handlers to catch promise rejections |
-| `not-found` | 404 catch-all for unmatched routes |
-
-### API Endpoints
-
-All endpoints are prefixed with `/api/v1`.
+### API Endpoints (`/api/v1`)
 
 | Module | Endpoints |
 |--------|-----------|
@@ -175,26 +179,17 @@ All endpoints are prefixed with `/api/v1`.
 | Reviews | `GET /reviews`, `GET /reviews/:id`, `POST /reviews`, `PUT /reviews/:id`, `DELETE /reviews/:id` |
 | Cart | `GET /cart`, `POST /cart`, `PUT /cart/:id`, `DELETE /cart/:id`, `DELETE /cart` |
 
-🔒 = Requires `Authorization: Bearer <token>` header
-ADMIN = Requires ADMIN role
-
-### JWT Blacklist (Logout Revocation)
-
-When a user logs out, their JWT is stored in Redis with a TTL matching the token's remaining expiry. The `auth` middleware checks Redis before verifying the token — if found, the request is rejected with `401 Unauthorized`.
+🔒 = Requires `Authorization: Bearer <token>` | ADMIN = Requires ADMIN role
 
 ## Database Schema (RBAC)
 
-### Role-Based Access Control
-
 | Table | Purpose |
 |-------|---------|
-| `permissions` | Granular `resource:action` pairs (e.g. `product:create`) |
+| `permissions` | Granular `resource:action` pairs |
 | `roles` | Named roles: ADMIN, VENDOR, CUSTOMER |
 | `role_permissions` | Many-to-many: role ↔ permission |
 | `user_roles` | Many-to-many: user ↔ role |
 
-### Domain Models
-
-User, VendorProfile, Category, Product, Order, OrderItem, Review, CartItem
+Domain Models: User, VendorProfile, Category, Product, Order, OrderItem, Review, CartItem
 
 See `apps/api/prisma/schema.prisma` for the full schema.
