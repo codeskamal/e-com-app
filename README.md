@@ -96,6 +96,10 @@ pnpm --filter api exec prisma db push
 pnpm --filter api exec prisma db seed
 ```
 
+### Redis Setup
+
+Redis is used for JWT blacklist (logout token revocation). Ensure Redis is running locally on `127.0.0.1:6379`.
+
 ### Environment Variables (`apps/api/.env`)
 
 ```
@@ -148,6 +152,43 @@ The seed script creates:
 
 **Sample Credentials:** `admin@e-com.com` / `password123` (+ vendor/customer variants)
 
+## Frontend Portals
+
+The web app uses Next.js App Router with **route groups** for four distinct portals:
+
+| Portal | URL Prefix | Layout | Purpose |
+|--------|-----------|--------|---------|
+| **Public** | `/`, `/products`, `/cart` | Navbar + Footer | Browse & shop |
+| **Customer** | `/customer/*` | Navbar + Sidebar | Order history, profile |
+| **Admin** | `/admin/*` | Navbar + Sidebar | Platform management |
+| **Vendor** | `/vendor/*` | Navbar + Sidebar | Store management |
+
+### UI Components (`src/components/ui/`)
+
+| Component | Description |
+|-----------|-------------|
+| `Button` | Primary/secondary/outline/ghost/danger variants, loading state, motion animations |
+| `Input` | Label + error state, focus ring with brand colors |
+| `Card` | Card container with optional hover elevation |
+| `Badge` | Pill-shaped tag with color variants |
+| `Modal` | Animated dialog with backdrop (AnimatePresence) |
+| `Skeleton` | Pulse-animated loading placeholder |
+
+### Brand Colors (Tailwind CSS v4 theme)
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `brand-1` | `#DC095E` | Primary CTA, accents |
+| `brand-1-light` | `#f51c85` | Hover states |
+| `brand-1-dark` | `#a8074a` | Active/pressed states |
+| `brand-2` | `#09DC88` | Success, secondary accents |
+| `brand-2-light` | `#3aea9f` | Light success |
+| `brand-2-dark` | `#07a864` | Dark success |
+
+### Animations
+
+All page content wrapped in `<PageTransition>` for fade + slide entrance. `<FadeIn>` for staggered element reveals. `<Modal>` uses `AnimatePresence` for enter/exit transitions.
+
 ## API Architecture
 
 All API code follows a **function-based** N-tier pattern:
@@ -189,37 +230,16 @@ For clothing e-commerce (men/women/kids), products have **variants** by Size × 
 
 Each variant has a unique SKU and can be ordered independently.
 
-## Frontend Portals
-
-| Portal | URL Prefix | Layout |
-|--------|-----------|--------|
-| **Public** | `/`, `/products`, `/cart` | Navbar + Footer |
-| **Customer** | `/customer/*` | Navbar + Sidebar |
-| **Admin** | `/admin/*` | Navbar + Sidebar |
-| **Vendor** | `/vendor/*` | Navbar + Sidebar |
-
-### UI Components
-
-| Component | Description |
-|-----------|-------------|
-| `Button` | 5 variants (primary/secondary/outline/ghost/danger), motion animations |
-| `Input` | Label + error state, focus ring |
-| `Card` | Container with optional hover |
-| `Badge` | Pill-shaped tag |
-| `Modal` | AnimatePresence dialog |
-| `Skeleton` | Pulse loading placeholder |
-
-### Brand Colors (Tailwind CSS v4)
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `brand-1` | `#DC095E` | Primary CTA |
-| `brand-2` | `#09DC88` | Success/secondary |
-
 ## Database Schema (RBAC + Variations)
 
 ### Core RBAC Tables
-`permissions`, `roles`, `role_permissions`, `user_roles`
+
+| Table | Purpose |
+|-------|---------|
+| `permissions` | Granular `resource:action` pairs |
+| `roles` | Named roles: ADMIN, VENDOR, CUSTOMER |
+| `role_permissions` | Many-to-many: role ↔ permission |
+| `user_roles` | Many-to-many: user ↔ role |
 
 ### Domain Tables
 `users`, `vendor_profiles`, `categories`, `products`, `orders`, `order_items`, `reviews`, `cart_items`
