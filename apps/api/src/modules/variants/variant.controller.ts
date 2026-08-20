@@ -1,20 +1,21 @@
 import type { Request, Response, NextFunction } from "express";
-import * as productService from "./product.service.js";
+import * as variantService from "./variant.service.js";
 
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    const product = await productService.getById(id);
-    res.json({ data: product });
+    const variant = await variantService.getById(id);
+    res.json({ data: variant });
   } catch (error) {
     next(error);
   }
 }
 
-export async function list(req: Request, res: Response, next: NextFunction) {
+export async function listByProduct(req: Request, res: Response, next: NextFunction) {
   try {
-    const result = await productService.list(req.query as never);
-    res.json({ data: result });
+    const productId = Number(req.params.productId);
+    const variants = await variantService.listByProduct(productId);
+    res.json({ data: variants });
   } catch (error) {
     next(error);
   }
@@ -22,8 +23,9 @@ export async function list(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const product = await productService.create(req.body);
-    res.status(201).json({ data: product });
+    const productId = Number(req.params.productId);
+    const variant = await variantService.create(productId, req.body);
+    res.status(201).json({ data: variant });
   } catch (error) {
     next(error);
   }
@@ -32,8 +34,8 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    const product = await productService.update(id, req.body);
-    res.json({ data: product });
+    const variant = await variantService.update(id, req.body);
+    res.json({ data: variant });
   } catch (error) {
     next(error);
   }
@@ -42,7 +44,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number(req.params.id);
-    await productService.remove(id);
+    await variantService.remove(id);
     res.status(204).send();
   } catch (error) {
     next(error);

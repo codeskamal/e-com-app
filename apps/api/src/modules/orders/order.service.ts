@@ -1,18 +1,14 @@
-import { OrderRepository } from "./order.repository.js";
+import * as orderRepository from "./order.repository.js";
 import type { CreateOrderInput, ListOrdersQuery } from "./order.schema.js";
 
-const orderRepository = new OrderRepository();
+export async function getById(id: number) {
+  return orderRepository.findOrFail(id);
+}
 
-export class OrderService {
-  async getById(id: number) {
-    return orderRepository.findOrFail(id);
-  }
+export async function list(query: ListOrdersQuery) {
+  return orderRepository.findAll(query);
+}
 
-  async list(query: ListOrdersQuery) {
-    return orderRepository.findAll(query);
-  }
-
-  async create(userId: number, data: CreateOrderInput) {
-    return orderRepository.create(userId, data.items);
-  }
+export async function create(userId: number, data: CreateOrderInput) {
+  return orderRepository.create(userId, data.items);
 }

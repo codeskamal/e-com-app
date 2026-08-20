@@ -1,22 +1,18 @@
-import { VendorRepository } from "./vendor.repository.js";
+import * as vendorRepository from "./vendor.repository.js";
 import type { CreateVendorInput, UpdateVendorInput, ListVendorsQuery } from "./vendor.schema.js";
 
-const vendorRepository = new VendorRepository();
+export async function getById(id: number) {
+  return vendorRepository.findOrFail(id);
+}
 
-export class VendorService {
-  async getById(id: number) {
-    return vendorRepository.findOrFail(id);
-  }
+export async function list(query: ListVendorsQuery) {
+  return vendorRepository.findAll(query);
+}
 
-  async list(query: ListVendorsQuery) {
-    return vendorRepository.findAll(query);
-  }
+export async function create(userId: number, data: CreateVendorInput) {
+  return vendorRepository.create(userId, data);
+}
 
-  async create(userId: number, data: CreateVendorInput) {
-    return vendorRepository.create(userId, data);
-  }
-
-  async update(id: number, data: UpdateVendorInput) {
-    return vendorRepository.update(id, data);
-  }
+export async function update(id: number, data: UpdateVendorInput) {
+  return vendorRepository.update(id, data);
 }

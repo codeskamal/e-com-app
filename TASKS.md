@@ -25,7 +25,8 @@
 
 ## Phase 2: Authentication & Authorization
 
-- [] Task 2.1: In `apps/web` There will be four portals one for customer, admin, vendor, public pages. Set folder structure accordingly. Design own Ui components. Animation will be used Motion (Framer Motion). Brand colors will be --color-1: #DC095E;,--color-2: #09DC88;
+- [x] Task 2.1: In `apps/web` There will be four portals one for customer, admin, vendor, public pages. Set folder structure accordingly. Design own Ui components. Animation will be used Motion (Framer Motion). Brand colors will be --color-1: #DC095E;,--color-2: #09DC88;
 - [] Task 2.2: Design should be mobile first and responsive for all devices.
 - [x] Task 2.3: In `apps/api` build api for getting logged user details, authentication and authorization middleware, profile change, password change, also radis because we can expire jwt after logout but we can prevent to access routes using loggedout token.
 - [] Task 2.4: Design public pages like home page, product listing page, cart pages.
+- [x] Task 2.5: In `apps/api` build api and schema for product variations. Treat as clothing for men, women, kids e commerece website. Add some dummy record for all tables. Also create some user

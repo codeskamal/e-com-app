@@ -1,26 +1,22 @@
-import { ProductRepository } from "./product.repository.js";
+import * as productRepository from "./product.repository.js";
 import type { CreateProductInput, UpdateProductInput, ListProductsQuery } from "./product.schema.js";
 
-const productRepository = new ProductRepository();
+export async function getById(id: number) {
+  return productRepository.findOrFail(id);
+}
 
-export class ProductService {
-  async getById(id: number) {
-    return productRepository.findOrFail(id);
-  }
+export async function list(query: ListProductsQuery) {
+  return productRepository.findAll(query);
+}
 
-  async list(query: ListProductsQuery) {
-    return productRepository.findAll(query);
-  }
+export async function create(data: CreateProductInput) {
+  return productRepository.create(data);
+}
 
-  async create(data: CreateProductInput) {
-    return productRepository.create(data);
-  }
+export async function update(id: number, data: UpdateProductInput) {
+  return productRepository.update(id, data);
+}
 
-  async update(id: number, data: UpdateProductInput) {
-    return productRepository.update(id, data);
-  }
-
-  async remove(id: number) {
-    return productRepository.delete(id);
-  }
+export async function remove(id: number) {
+  return productRepository.remove(id);
 }

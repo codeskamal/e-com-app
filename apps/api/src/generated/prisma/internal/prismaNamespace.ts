@@ -405,6 +405,10 @@ export const ModelName = {
   VendorProfile: 'VendorProfile',
   Category: 'Category',
   Product: 'Product',
+  ProductVariant: 'ProductVariant',
+  Attribute: 'Attribute',
+  AttributeValue: 'AttributeValue',
+  VariantAttribute: 'VariantAttribute',
   Order: 'Order',
   OrderItem: 'OrderItem',
   Review: 'Review',
@@ -424,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "permission" | "role" | "rolePermission" | "userRole" | "user" | "vendorProfile" | "category" | "product" | "order" | "orderItem" | "review" | "cartItem"
+    modelProps: "permission" | "role" | "rolePermission" | "userRole" | "user" | "vendorProfile" | "category" | "product" | "productVariant" | "attribute" | "attributeValue" | "variantAttribute" | "order" | "orderItem" | "review" | "cartItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -956,6 +960,270 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProductVariant: {
+      payload: Prisma.$ProductVariantPayload<ExtArgs>
+      fields: Prisma.ProductVariantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductVariantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductVariantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        findFirst: {
+          args: Prisma.ProductVariantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductVariantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        findMany: {
+          args: Prisma.ProductVariantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>[]
+        }
+        create: {
+          args: Prisma.ProductVariantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        createMany: {
+          args: Prisma.ProductVariantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProductVariantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        update: {
+          args: Prisma.ProductVariantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductVariantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductVariantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProductVariantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductVariantPayload>
+        }
+        aggregate: {
+          args: Prisma.ProductVariantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductVariant>
+        }
+        groupBy: {
+          args: Prisma.ProductVariantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductVariantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductVariantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductVariantCountAggregateOutputType> | number
+        }
+      }
+    }
+    Attribute: {
+      payload: Prisma.$AttributePayload<ExtArgs>
+      fields: Prisma.AttributeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AttributeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AttributeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        findFirst: {
+          args: Prisma.AttributeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AttributeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        findMany: {
+          args: Prisma.AttributeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>[]
+        }
+        create: {
+          args: Prisma.AttributeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        createMany: {
+          args: Prisma.AttributeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.AttributeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        update: {
+          args: Prisma.AttributeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        deleteMany: {
+          args: Prisma.AttributeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AttributeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.AttributeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributePayload>
+        }
+        aggregate: {
+          args: Prisma.AttributeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAttribute>
+        }
+        groupBy: {
+          args: Prisma.AttributeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttributeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AttributeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttributeCountAggregateOutputType> | number
+        }
+      }
+    }
+    AttributeValue: {
+      payload: Prisma.$AttributeValuePayload<ExtArgs>
+      fields: Prisma.AttributeValueFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AttributeValueFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AttributeValueFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        findFirst: {
+          args: Prisma.AttributeValueFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AttributeValueFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        findMany: {
+          args: Prisma.AttributeValueFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>[]
+        }
+        create: {
+          args: Prisma.AttributeValueCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        createMany: {
+          args: Prisma.AttributeValueCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.AttributeValueDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        update: {
+          args: Prisma.AttributeValueUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        deleteMany: {
+          args: Prisma.AttributeValueDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AttributeValueUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.AttributeValueUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+        }
+        aggregate: {
+          args: Prisma.AttributeValueAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAttributeValue>
+        }
+        groupBy: {
+          args: Prisma.AttributeValueGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttributeValueGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AttributeValueCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AttributeValueCountAggregateOutputType> | number
+        }
+      }
+    }
+    VariantAttribute: {
+      payload: Prisma.$VariantAttributePayload<ExtArgs>
+      fields: Prisma.VariantAttributeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VariantAttributeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VariantAttributeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        findFirst: {
+          args: Prisma.VariantAttributeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VariantAttributeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        findMany: {
+          args: Prisma.VariantAttributeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>[]
+        }
+        create: {
+          args: Prisma.VariantAttributeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        createMany: {
+          args: Prisma.VariantAttributeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.VariantAttributeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        update: {
+          args: Prisma.VariantAttributeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        deleteMany: {
+          args: Prisma.VariantAttributeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VariantAttributeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.VariantAttributeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VariantAttributePayload>
+        }
+        aggregate: {
+          args: Prisma.VariantAttributeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVariantAttribute>
+        }
+        groupBy: {
+          args: Prisma.VariantAttributeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VariantAttributeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VariantAttributeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VariantAttributeCountAggregateOutputType> | number
+        }
+      }
+    }
     Order: {
       payload: Prisma.$OrderPayload<ExtArgs>
       fields: Prisma.OrderFieldRefs
@@ -1351,6 +1619,53 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const ProductVariantScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  sku: 'sku',
+  price: 'price',
+  compareAtPrice: 'compareAtPrice',
+  inventory: 'inventory',
+  weight: 'weight',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
+
+
+export const AttributeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  createdAt: 'createdAt'
+} as const
+
+export type AttributeScalarFieldEnum = (typeof AttributeScalarFieldEnum)[keyof typeof AttributeScalarFieldEnum]
+
+
+export const AttributeValueScalarFieldEnum = {
+  id: 'id',
+  attributeId: 'attributeId',
+  value: 'value',
+  slug: 'slug',
+  hexCode: 'hexCode',
+  createdAt: 'createdAt'
+} as const
+
+export type AttributeValueScalarFieldEnum = (typeof AttributeValueScalarFieldEnum)[keyof typeof AttributeValueScalarFieldEnum]
+
+
+export const VariantAttributeScalarFieldEnum = {
+  id: 'id',
+  variantId: 'variantId',
+  attributeValueId: 'attributeValueId'
+} as const
+
+export type VariantAttributeScalarFieldEnum = (typeof VariantAttributeScalarFieldEnum)[keyof typeof VariantAttributeScalarFieldEnum]
+
+
 export const OrderScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1367,6 +1682,7 @@ export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   productId: 'productId',
+  variantId: 'variantId',
   quantity: 'quantity',
   price: 'price'
 } as const
@@ -1391,6 +1707,7 @@ export const CartItemScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   productId: 'productId',
+  variantId: 'variantId',
   quantity: 'quantity'
 } as const
 
@@ -1463,6 +1780,30 @@ export const ProductOrderByRelevanceFieldEnum = {
 } as const
 
 export type ProductOrderByRelevanceFieldEnum = (typeof ProductOrderByRelevanceFieldEnum)[keyof typeof ProductOrderByRelevanceFieldEnum]
+
+
+export const ProductVariantOrderByRelevanceFieldEnum = {
+  sku: 'sku'
+} as const
+
+export type ProductVariantOrderByRelevanceFieldEnum = (typeof ProductVariantOrderByRelevanceFieldEnum)[keyof typeof ProductVariantOrderByRelevanceFieldEnum]
+
+
+export const AttributeOrderByRelevanceFieldEnum = {
+  name: 'name',
+  type: 'type'
+} as const
+
+export type AttributeOrderByRelevanceFieldEnum = (typeof AttributeOrderByRelevanceFieldEnum)[keyof typeof AttributeOrderByRelevanceFieldEnum]
+
+
+export const AttributeValueOrderByRelevanceFieldEnum = {
+  value: 'value',
+  slug: 'slug',
+  hexCode: 'hexCode'
+} as const
+
+export type AttributeValueOrderByRelevanceFieldEnum = (typeof AttributeValueOrderByRelevanceFieldEnum)[keyof typeof AttributeValueOrderByRelevanceFieldEnum]
 
 
 export const ReviewOrderByRelevanceFieldEnum = {
@@ -1685,6 +2026,10 @@ export type GlobalOmitConfig = {
   vendorProfile?: Prisma.VendorProfileOmit
   category?: Prisma.CategoryOmit
   product?: Prisma.ProductOmit
+  productVariant?: Prisma.ProductVariantOmit
+  attribute?: Prisma.AttributeOmit
+  attributeValue?: Prisma.AttributeValueOmit
+  variantAttribute?: Prisma.VariantAttributeOmit
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit
   review?: Prisma.ReviewOmit
